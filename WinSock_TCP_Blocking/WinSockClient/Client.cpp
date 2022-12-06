@@ -37,13 +37,24 @@ int __cdecl main()
         return 1;
     }
 
+   
+
 
     sockaddr_in serverAddress;
     serverAddress.sin_family = AF_INET;
     serverAddress.sin_addr.s_addr = inet_addr(SERVER_IP_ADDRESS);
     serverAddress.sin_port = htons(DEFAULT_PORT);
 
-    //dodato
+    //neblokirajuci 
+    unsigned long int nonBlockingMode = 1;
+    iResult = ioctlsocket(connectSocket, FIONBIO, &nonBlockingMode);
+    if (iResult == SOCKET_ERROR)
+    {
+        printf("ioctlsocket failed with error: %ld\n", WSAGetLastError());
+        return 1;
+    }
+
+   
     iResult = connect(connectSocket, (SOCKADDR*)&serverAddress, sizeof(serverAddress));
     if (iResult == SOCKET_ERROR)
     {
@@ -53,6 +64,10 @@ int __cdecl main()
         return 1;
     }
     //
+
+
+    
+    
 
     while (true) {
         iResult = send(connectSocket, messageToSend, (int)strlen(messageToSend) + 1, 0);

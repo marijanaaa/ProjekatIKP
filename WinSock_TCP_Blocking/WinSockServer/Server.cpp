@@ -81,6 +81,15 @@ int  main(void)
 
 	printf("Server initialized, waiting for clients.\n");
 
+   //Proveriti da li listenSocket treba da se prebaci u neblokirajuci rezim
+    unsigned long int nonBlMode1 = 1;
+    iResult = ioctlsocket(listenSocket, FIONBIO, &nonBlMode1);
+    if (iResult == SOCKET_ERROR)
+    {
+        printf("ioctlsocket failed with error: %ld\n", WSAGetLastError());
+        return 1;
+    }
+
     do
     {
 
@@ -93,10 +102,42 @@ int  main(void)
             WSACleanup();
             return 1;
         }
+        //neblokirajuci rezim
+        unsigned long int nonBlMode = 1;
+        iResult = ioctlsocket(acceptedSocket, FIONBIO, &nonBlMode);
+        if (iResult == SOCKET_ERROR)
+        {
+            printf("ioctlsocket failed with error: %ld\n", WSAGetLastError());
+            return 1;
+        }
+
+        //dodajemo select
+        FD_SET set;
+        timeval timeVal;
+
+        FD_ZERO(&set);
+        // Add socket we will wait to read from
+        FD_SET(acceptedSocket, &set);
+
+        // Set timeouts to zero since we want select to return
+        // instantaneously
+        timeVal.tv_sec = 0;
+        timeVal.tv_usec = 0;
+
+        iResult = select(0 /* ignored */, &set, NULL, NULL, &timeVal);
+
+        // lets check if there was an error during select
+        if (iResult == SOCKET_ERROR)
+        {
+            fprintf(stderr, "select failed with error: %ld\n", WSAGetLastError());
+            continue;
+        }
+
 
         do
         {
 
+          
             iResult = recv(acceptedSocket, recvbuf, DEFAULT_BUFLEN, 0);
             if (iResult > 0)
             {
