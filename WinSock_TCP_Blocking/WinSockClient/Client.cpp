@@ -5,93 +5,101 @@
 #include <ws2tcpip.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <conio.h>
+#include "conio.h"
 
-#define DEFAULT_BUFLEN 512
-#define DEFAULT_PORT 27016
+#pragma comment (lib, "Ws2_32.lib")
+#pragma comment (lib, "Mswsock.lib")
+#pragma comment (lib, "AdvApi32.lib")
+
+#pragma pack(1)
+
 #define SERVER_IP_ADDRESS "127.0.0.1"
+#define SERVER_PORT 27016
+#define BUFFER_SIZE 256
 
-bool InitializeWindowsSockets();
 
-int __cdecl main() 
+
+int main()
 {
-    SOCKET connectSocket = INVALID_SOCKET;
-    int iResult;
-    char *messageToSend = "this is a test";
-    
+	SOCKET connectSocket = INVALID_SOCKET;
 
-    if(InitializeWindowsSockets() == false)
-    {
+	int iResult;
 
+	char dataBuffer[BUFFER_SIZE];
+
+	WSADATA wsaData;
+
+	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
+	{
+		printf("WSAStartup failed with error: %d\n", WSAGetLastError());
 		return 1;
-    }
+	}
 
-    connectSocket = socket(AF_INET,
-                           SOCK_STREAM,
-                           IPPROTO_TCP);
+	connectSocket = socket(AF_INET,
+		SOCK_STREAM,
+		IPPROTO_TCP);
 
-    if (connectSocket == INVALID_SOCKET)
-    {
-        printf("socket failed with error: %ld\n", WSAGetLastError());
-        WSACleanup();
-        return 1;
-    }
+	if (connectSocket == INVALID_SOCKET)
+	{
+		printf("socket failed with error: %ld\n", WSAGetLastError());
+		WSACleanup();
+		return 1;
+	}
 
+	sockaddr_in serverAddress;
+	serverAddress.sin_family = AF_INET;								// IPv4 protocol
+	serverAddress.sin_addr.s_addr = inet_addr(SERVER_IP_ADDRESS);	// ip address of server
+	serverAddress.sin_port = htons(SERVER_PORT);					// server port
 
-    sockaddr_in serverAddress;
-    serverAddress.sin_family = AF_INET;
-    serverAddress.sin_addr.s_addr = inet_addr(SERVER_IP_ADDRESS);
-    serverAddress.sin_port = htons(DEFAULT_PORT);
+	iResult = connect(connectSocket, (SOCKADDR*)&serverAddress, sizeof(serverAddress));
+	if (iResult == SOCKET_ERROR)
+	{
+		printf("Unable to connect to server.\n");
+		closesocket(connectSocket);
+		WSACleanup();
+		return 1;
+	}
 
-    //dodato
-    iResult = connect(connectSocket, (SOCKADDR*)&serverAddress, sizeof(serverAddress));
-    if (iResult == SOCKET_ERROR)
-    {
-        printf("Unable to connect to server.\n");
-        closesocket(connectSocket);
-        WSACleanup();
-        return 1;
-    }
-    //
+	char* message = "zdravo kako si";
 
-    while (true) {
-        iResult = send(connectSocket, messageToSend, (int)strlen(messageToSend) + 1, 0);
+	while (true)
+	{
+		iResult = send(connectSocket, message, (int)strlen(message) + 1, 0);
 
-        if (iResult == SOCKET_ERROR)
-        {
-            printf("send failed with error: %d\n", WSAGetLastError());
-            closesocket(connectSocket);
-            WSACleanup();
-            return 1;
-        }
+		if (iResult == SOCKET_ERROR)
+		{
+			printf("send failed with error: %d\n", WSAGetLastError());
+			closesocket(connectSocket);
+			WSACleanup();
+			return 1;
+		}
 
-        printf("Bytes Sent: %ld\n", iResult);
-    }
+		printf("Message successfully sent. Total bytes: %ld\n", iResult);
 
-    iResult = shutdown(connectSocket, SD_BOTH);
+		printf("\nPress 'x' to exit or any other key to continue: ");
+		if (getch() == 'x')
+			break;
+	}
 
-    if (iResult == SOCKET_ERROR)
-    {
-        printf("Shutdown failed with error: %d\n", WSAGetLastError());
-        closesocket(connectSocket);
-        WSACleanup();
-        return 1;
-    }
+	// Shutdown the connection since we're done
+	iResult = shutdown(connectSocket, SD_BOTH);
 
-    closesocket(connectSocket);
-    WSACleanup();
-    return 0;
+	// Check if connection is succesfully shut down.
+	if (iResult == SOCKET_ERROR)
+	{
+		printf("Shutdown failed with error: %d\n", WSAGetLastError());
+		closesocket(connectSocket);
+		WSACleanup();
+		return 1;
+	}
 
-}
+	Sleep(1000);
 
-bool InitializeWindowsSockets()
-{
-    WSADATA wsaData;
+	// Close connected socket
+	closesocket(connectSocket);
 
-    if (WSAStartup(MAKEWORD(2,2), &wsaData) != 0)
-    {
-        printf("WSAStartup failed with error: %d\n", WSAGetLastError());
-        return false;
-    }
-	return true;
+	// Deinitialize WSA library
+	WSACleanup();
+
+	return 0;
 }
