@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "conio.h"
+#include "HashTable.h"
+
 
 #pragma comment (lib, "Ws2_32.lib")
 #pragma comment (lib, "Mswsock.lib")
@@ -17,9 +19,20 @@
 #define BUFFER_SIZE 256
 #define MAX_CLIENTS 3
 
+void exit_nomem(void) {
+	fprintf(stderr, "out of memory\n");
+	exit(1);
+}
 
 int main()
 {
+
+	ht* HashTable = ht_create();
+	if (HashTable == NULL) {
+		exit_nomem();
+	}
+
+	
 	SOCKET listenSocket = INVALID_SOCKET;
 
 	SOCKET clientSockets[MAX_CLIENTS];
@@ -179,6 +192,33 @@ int main()
 
 						printf("Poruka: %s \n", &dataBuffer);
 						printf("_______________________________  \n");
+						void* value = ht_get(HashTable, dataBuffer);
+						if (value != NULL) {
+							// Already exists, increment int that value points to.
+							int* pcount = (int*)value;
+							(*pcount)++;
+						}
+
+						// Word not found, allocate space for new int and set to 1.
+						int* pcount = (int *)malloc(sizeof(int));
+						if (pcount == NULL) {
+							exit_nomem();
+						}
+						*pcount = 1;
+						if (ht_set(HashTable, dataBuffer, pcount) == NULL) {
+							exit_nomem();
+						}
+
+						hti it = ht_iterator(HashTable);
+						while (ht_next(&it)) {
+							printf("%s %d\n", it.key, *(int*)it.value);
+							free(it.value);
+						}
+
+						// Show the number of unique words.
+						printf("%d\n", (int)ht_length(HashTable));
+
+						ht_destroy(HashTable);
 
 
 					}

@@ -60,11 +60,23 @@ int main()
 		return 1;
 	}
 
-	char* message = "zdravo kako si";
+	char* username = "";
+	printf("Registruj se:\n");
+	printf("username: ");
+	scanf("%s",&username);
 
-	while (true)
+	iResult = send(connectSocket, username, (int)strlen(username) + 1, 0);
+	if (iResult == SOCKET_ERROR)
 	{
-		iResult = send(connectSocket, message, (int)strlen(message) + 1, 0);
+		printf("send failed with error: %d\n", WSAGetLastError());
+		closesocket(connectSocket);
+		WSACleanup();
+		return 1;
+	}
+
+	/*while (true)
+	{
+		iResult = send(connectSocket, username, (int)strlen(username) + 1, 0);
 
 		if (iResult == SOCKET_ERROR)
 		{
@@ -80,6 +92,8 @@ int main()
 		if (getch() == 'x')
 			break;
 	}
+	*/
+	getch();
 
 	// Shutdown the connection since we're done
 	iResult = shutdown(connectSocket, SD_BOTH);

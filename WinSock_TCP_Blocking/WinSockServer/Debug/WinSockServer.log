@@ -1,4 +1,4 @@
 ﻿  Server.cpp
-D:\downloads\IKP\1110bf_afd14268a9ad415ebfa7c4b9688ce303\WinSock_TCP_Blocking\WinSockServer\Server.cpp(127,5): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
-D:\downloads\IKP\1110bf_afd14268a9ad415ebfa7c4b9688ce303\WinSock_TCP_Blocking\WinSockServer\Server.cpp(160,86): warning C4996: 'inet_ntoa': Use inet_ntop() or InetNtop() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
-  WinSockServer.vcxproj -> D:\downloads\IKP\1110bf_afd14268a9ad415ebfa7c4b9688ce303\WinSock_TCP_Blocking\Debug\WinSockServer.exe
+D:\IKP\ProjekatIKP\WinSock_TCP_Blocking\WinSockServer\Server.cpp(140,5): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+D:\IKP\ProjekatIKP\WinSock_TCP_Blocking\WinSockServer\Server.cpp(173,86): warning C4996: 'inet_ntoa': Use inet_ntop() or InetNtop() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
+  WinSockServer.vcxproj -> D:\IKP\ProjekatIKP\WinSock_TCP_Blocking\Debug\WinSockServer.exe
