@@ -60,10 +60,10 @@ int main()
 		return 1;
 	}
 
-	char* username = "";
+	char username[50];
 	printf("Registruj se:\n");
 	printf("username: ");
-	scanf("%s",&username);
+	scanf("%s",username);
 
 	iResult = send(connectSocket, username, (int)strlen(username) + 1, 0);
 	if (iResult == SOCKET_ERROR)
