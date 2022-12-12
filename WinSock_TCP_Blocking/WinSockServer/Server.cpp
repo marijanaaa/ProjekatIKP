@@ -212,13 +212,13 @@ int main()
 						hti it = ht_iterator(HashTable);
 						while (ht_next(&it)) {
 							printf("%s %d\n", it.key, *(int*)it.value);
-							free(it.value);
+							//free(it.value);
 						}
 
 						// Show the number of unique words.
 						printf("%d\n", (int)ht_length(HashTable));
 
-						ht_destroy(HashTable);
+						
 
 
 					}
@@ -256,7 +256,12 @@ int main()
 			}
 		}
 	}
-
+	hti it = ht_iterator(HashTable);
+	while (ht_next(&it)) {
+		
+		free(it.value);
+	}
+	ht_destroy(HashTable);
 	//Close listen and accepted sockets
 	closesocket(listenSocket);
 
