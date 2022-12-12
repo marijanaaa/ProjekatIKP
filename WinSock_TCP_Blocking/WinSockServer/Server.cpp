@@ -195,6 +195,19 @@ int main()
 						void* value = ht_get(HashTable, dataBuffer);
 						if (value != NULL) {
 							// Already exists, increment int that value points to.
+							
+							
+
+							iResult = send(clientSockets[i], "Ponovo", (int)strlen("Ponovo") + 1, 0);
+							if (iResult == SOCKET_ERROR)
+							{
+								printf("send failed with error: %d\n", WSAGetLastError());
+								closesocket(clientSockets[i]);
+								WSACleanup();
+								return 1;
+							}
+
+
 							int* pcount = (int*)value;
 							(*pcount)++;
 						}
@@ -204,7 +217,7 @@ int main()
 						if (pcount == NULL) {
 							exit_nomem();
 						}
-						*pcount = 1;
+						*pcount = 1;//vrednost
 						if (ht_set(HashTable, dataBuffer, pcount) == NULL) {
 							exit_nomem();
 						}

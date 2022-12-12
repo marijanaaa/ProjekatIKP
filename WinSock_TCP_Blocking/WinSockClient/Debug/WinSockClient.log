@@ -1,6 +1,5 @@
 ﻿  Client.cpp
 C:\Users\Katarina\Desktop\IKPProj\ProjekatIKP\WinSock_TCP_Blocking\WinSockClient\Client.cpp(51,34): warning C4996: 'inet_addr': Use inet_pton() or InetPton() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
-C:\Users\Katarina\Desktop\IKPProj\ProjekatIKP\WinSock_TCP_Blocking\WinSockClient\Client.cpp(66,2): warning C4996: 'scanf': This function or variable may be unsafe. Consider using scanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-C:\Users\Katarina\Desktop\IKPProj\ProjekatIKP\WinSock_TCP_Blocking\WinSockClient\Client.cpp(96,2): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
-C:\Users\Katarina\Desktop\IKPProj\ProjekatIKP\WinSock_TCP_Blocking\WinSockClient\Client.cpp(28,7): warning C4101: 'dataBuffer': unreferenced local variable
+C:\Users\Katarina\Desktop\IKPProj\ProjekatIKP\WinSock_TCP_Blocking\WinSockClient\Client.cpp(67,3): warning C4996: 'scanf': This function or variable may be unsafe. Consider using scanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\Katarina\Desktop\IKPProj\ProjekatIKP\WinSock_TCP_Blocking\WinSockClient\Client.cpp(108,2): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
   WinSockClient.vcxproj -> C:\Users\Katarina\Desktop\IKPProj\ProjekatIKP\WinSock_TCP_Blocking\Debug\WinSockClient.exe

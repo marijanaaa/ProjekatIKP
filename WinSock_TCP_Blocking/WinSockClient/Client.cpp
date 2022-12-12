@@ -60,18 +60,30 @@ int main()
 		return 1;
 	}
 
-	char username[50];
-	printf("Registruj se:\n");
-	printf("username: ");
-	scanf("%s",username);
+	while (true) {
+		char username[50];
+		printf("Registruj se:\n");
+		printf("username: ");
+		scanf("%s", username);
 
-	iResult = send(connectSocket, username, (int)strlen(username) + 1, 0);
-	if (iResult == SOCKET_ERROR)
-	{
-		printf("send failed with error: %d\n", WSAGetLastError());
-		closesocket(connectSocket);
-		WSACleanup();
-		return 1;
+		iResult = send(connectSocket, username, (int)strlen(username) + 1, 0);
+		if (iResult == SOCKET_ERROR)
+		{
+			printf("send failed with error: %d\n", WSAGetLastError());
+			closesocket(connectSocket);
+			WSACleanup();
+			return 1;
+		}
+		
+
+		if (recv(connectSocket, dataBuffer, BUFFER_SIZE, 0) == 0) {
+			
+			break;
+			
+		}
+		printf("Poruka: %s \n", &dataBuffer);
+	
+
 	}
 
 	/*while (true)
